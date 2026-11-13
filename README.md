@@ -4,6 +4,7 @@ Navegador Android ligero para ver videos y transmisiones en vivo desde tus propi
 
 ## APK
 
+- Descarga: https://github.com/quijotevitruvio/vid-libre/releases/latest
 - **`TVFut-1.0.apk`** (2.6 MB) — versión release, lista para instalar.
 - Paquete: `com.tvfut.app`
 - Requisitos: Android 7.0 o superior (minSdk 24).
