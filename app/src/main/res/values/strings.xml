@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TVFut</string>
+    <string name="app_subtitle">Tus enlaces, sin anuncios</string>
+
+    <string name="empty_title">Todavía no hay enlaces</string>
+    <string name="empty_text">Pulsa + para agregar una página con video o un enlace directo (.m3u8, .mp4).</string>
+    <string name="add_link">Agregar enlace</string>
+    <string name="edit_link">Editar enlace</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete">Eliminar</string>
+    <string name="copy">Copiar enlace</string>
+    <string name="play_direct">Reproducir directo</string>
+    <string name="name_hint">Nombre</string>
+    <string name="url_hint">Enlace (https://…)</string>
+    <string name="invalid_url">Escribe un enlace válido</string>
+    <string name="required_name">Ponle un nombre</string>
+    <string name="delete_confirm">¿Eliminar «%1$s»?</string>
+    <string name="copy_title">Enlace copiado</string>
+
+    <string name="settings">Ajustes</string>
+    <string name="settings_title">Ajustes</string>
+    <string name="block_ads">Bloquear anuncios</string>
+    <string name="block_ads_desc">Filtra dominios publicitarios, ventanas emergentes y capas molestas.</string>
+    <string name="clear_cache">Borrar caché y cookies</string>
+    <string name="cache_cleared">Caché y cookies borradas</string>
+    <string name="dns_tip">Tip: en Ajustes de Android → DNS privado puedes usar dns.adguard-dns.com para bloquear anuncios en todo el teléfono.</string>
+    <string name="version">TVFut 1.0</string>
+    <string name="close">Cerrar</string>
+
+    <string name="reload">Recargar</string>
+    <string name="open_external">Abrir en navegador</string>
+    <string name="menu">Opciones</string>
+    <string name="stream_found">Stream detectado en esta página</string>
+    <string name="play_stream">Ver directo</string>
+    <string name="streams_title">Elige el stream</string>
+    <string name="error_title">No se pudo cargar la página</string>
+    <string name="error_text">Revisa tu conexión o el enlace.</string>
+    <string name="retry">Reintentar</string>
+    <string name="live">EN VIVO</string>
+    <string name="playback_error">No se pudo reproducir este enlace.</string>
+</resources>
