@@ -10,12 +10,19 @@ class AdBlocker(context: Context) {
         appContext.getSharedPreferences("tvfut_prefs", Context.MODE_PRIVATE)
 
     private val hosts: Set<String> by lazy { loadHosts() }
+    private var customHosts: Set<String> = loadCustomHosts()
     private val script: String by lazy { loadScript() }
 
     var enabled: Boolean
         get() = prefs.getBoolean(KEY_ENABLED, true)
         set(value) {
             prefs.edit().putBoolean(KEY_ENABLED, value).apply()
+        }
+
+    var strictMode: Boolean
+        get() = prefs.getBoolean(KEY_STRICT, false)
+        set(value) {
+            prefs.edit().putBoolean(KEY_STRICT, value).apply()
         }
 
     fun isBlocked(url: String?): Boolean {
@@ -35,17 +42,37 @@ class AdBlocker(context: Context) {
         if (target.startsWith("www.")) {
             target = target.substring(4)
         }
-        if (hosts.contains(target)) return true
+        if (target in hosts || target in customHosts) return true
 
         var dot = target.indexOf('.')
         while (dot >= 0) {
-            if (hosts.contains(target.substring(dot + 1))) return true
+            val suffix = target.substring(dot + 1)
+            if (suffix in hosts || suffix in customHosts) return true
             dot = target.indexOf('.', dot + 1)
         }
         return false
     }
 
     fun cosmeticScript(): String = script
+
+    fun customHostsText(): String = prefs.getString(KEY_CUSTOM, "").orEmpty()
+
+    fun saveCustomHosts(text: String) {
+        val normalized = text.split('\n', ',')
+            .map { it.trim().lowercase() }
+            .filter { it.isNotEmpty() && !it.startsWith("#") }
+            .toSet()
+        prefs.edit().putString(KEY_CUSTOM, normalized.joinToString("\n")).apply()
+        customHosts = normalized
+    }
+
+    private fun loadCustomHosts(): Set<String> {
+        return prefs.getString(KEY_CUSTOM, "").orEmpty()
+            .split('\n', ',')
+            .map { it.trim().lowercase() }
+            .filter { it.isNotEmpty() }
+            .toSet()
+    }
 
     private fun loadHosts(): Set<String> {
         val result = HashSet<String>()
@@ -71,5 +98,7 @@ class AdBlocker(context: Context) {
 
     companion object {
         private const val KEY_ENABLED = "adblock_enabled"
+        private const val KEY_STRICT = "strict_mode"
+        private const val KEY_CUSTOM = "custom_hosts"
     }
 }

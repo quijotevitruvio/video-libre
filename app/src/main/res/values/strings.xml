@@ -23,10 +23,16 @@
     <string name="settings_title">Ajustes</string>
     <string name="block_ads">Bloquear anuncios</string>
     <string name="block_ads_desc">Filtra dominios publicitarios, ventanas emergentes y capas molestas.</string>
+    <string name="strict_mode">Modo estricto (bloquear terceros)</string>
+    <string name="strict_mode_desc">Bloquea scripts, imágenes y peticiones de otros dominios. Puede romper algunos reproductores; los videos y segmentos HLS se permiten.</string>
+    <string name="custom_list">Lista personalizada de dominios</string>
+    <string name="custom_list_desc">Un dominio por línea. Se bloquean también sus subdominios.</string>
+    <string name="custom_list_hint">ejemplo.com</string>
+    <string name="save_list">Guardar lista</string>
     <string name="clear_cache">Borrar caché y cookies</string>
     <string name="cache_cleared">Caché y cookies borradas</string>
     <string name="dns_tip">Tip: en Ajustes de Android → DNS privado puedes usar dns.adguard-dns.com para bloquear anuncios en todo el teléfono.</string>
-    <string name="version">TVFut 1.0</string>
+    <string name="version">TVFut 1.1</string>
     <string name="close">Cerrar</string>
 
     <string name="reload">Recargar</string>

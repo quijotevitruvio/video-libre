@@ -1,24 +1,24 @@
-# TVFut 1.0
+# TVFut 1.1
 
 Navegador Android ligero para ver videos y transmisiones en vivo desde tus propios enlaces, con bloqueo de publicidad.
 
 ## APK
 
 - Descarga: https://github.com/quijotevitruvio/vid-libre/releases/latest
-- **`TVFut-1.0.apk`** (2.6 MB) — versión release, lista para instalar.
+- **`TVFut-1.1.apk`** (2.6 MB) — versión release, lista para instalar.
 - Paquete: `com.tvfut.app`
 - Requisitos: Android 7.0 o superior (minSdk 24).
 
 Instalación:
 
-1. Copia `TVFut-1.0.apk` al teléfono.
+1. Copia `TVFut-1.1.apk` al teléfono.
 2. Abre el archivo y permite instalar apps desconocidas para esa fuente.
 3. Abre **TVFut**.
 
 También se puede instalar por ADB:
 
 ```powershell
-adb install -r TVFut-1.0.apk
+adb install -r TVFut-1.1.apk
 ```
 
 ## Qué hace
@@ -31,7 +31,7 @@ adb install -r TVFut-1.0.apk
   - pantalla completa para el video.
 - **Detección de streams**: si la página carga un `.m3u8`, `.mpd` o `.mp4`, aparece el botón **Ver directo**.
 - **Reproductor Media3/ExoPlayer**: HLS, DASH, MP4, pantalla completa, badge **EN VIVO** y controles táctiles.
-- **Ajustes**: activar/desactivar el bloqueo y borrar caché/cookies.
+- **Ajustes**: activar/desactivar el bloqueo, **modo estricto** (bloquea peticiones de terceros), **lista personalizada de dominios** y borrar caché/cookies.
 - Al agregar un enlace, si el portapapeles contiene una URL, se rellena sola.
 
 ## Uso
@@ -50,6 +50,8 @@ Demos incluidas: un MP4 y un HLS de prueba. Se pueden eliminar.
 
 - `app/src/main/assets/ad_hosts.txt`: lista de dominios. Se bloquean también sus subdominios. Puedes añadir más dominios, uno por línea.
 - `app/src/main/assets/cosmetic.js`: oculta selectores conocidos de anuncios y observa el DOM para limpiar los que aparezcan después.
+- **Modo estricto** (Ajustes): bloquea peticiones de terceros (scripts, imágenes, iframes) y permite el dominio de la página y los archivos de video/HLS. Puede romper reproductores que cargan su código desde otro dominio.
+- **Lista personalizada** (Ajustes): dominios extra, uno por línea; se bloquean también sus subdominios.
 - `PlayerActivity.kt`: intercepta las peticiones del WebView y corta las que pertenecen a dominios bloqueados.
 
 ### Límites normales de este enfoque

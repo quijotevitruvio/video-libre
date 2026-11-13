@@ -216,6 +216,21 @@ class MainActivity : AppCompatActivity() {
             setTextColor(getColor(R.color.muted))
             textSize = 13f
         }
+        val strictSwitch = MaterialSwitch(this).apply {
+            text = getString(R.string.strict_mode)
+            isChecked = adBlocker.strictMode
+            setPadding(0, padding / 2, 0, 0)
+            setOnCheckedChangeListener { _, checked -> adBlocker.strictMode = checked }
+        }
+        val strictDescription = TextView(this).apply {
+            text = getString(R.string.strict_mode_desc)
+            setTextColor(getColor(R.color.muted))
+            textSize = 13f
+        }
+        val customButton = com.google.android.material.button.MaterialButton(this).apply {
+            text = getString(R.string.custom_list)
+            setOnClickListener { showCustomHostsDialog(adBlocker) }
+        }
         val tip = TextView(this).apply {
             text = getString(R.string.dns_tip)
             setTextColor(getColor(R.color.muted))
@@ -231,6 +246,15 @@ class MainActivity : AppCompatActivity() {
 
         container.addView(switch)
         container.addView(description)
+        container.addView(strictSwitch)
+        container.addView(strictDescription)
+        container.addView(
+            customButton,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply { topMargin = padding / 2 }
+        )
         container.addView(tip)
         container.addView(version)
 
@@ -239,6 +263,39 @@ class MainActivity : AppCompatActivity() {
             .setView(container)
             .setPositiveButton(R.string.close, null)
             .setNeutralButton(R.string.clear_cache) { _, _ -> clearBrowserData() }
+            .show()
+    }
+
+    private fun showCustomHostsDialog(adBlocker: AdBlocker) {
+        val padding = (20 * resources.displayMetrics.density).toInt()
+        val input = com.google.android.material.textfield.TextInputEditText(this).apply {
+            setText(adBlocker.customHostsText())
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or
+                android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            minLines = 6
+            maxLines = 12
+            gravity = android.view.Gravity.TOP or android.view.Gravity.START
+            hint = getString(R.string.custom_list_hint)
+        }
+        val container = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(padding, padding / 2, padding, 0)
+        }
+        val description = TextView(this).apply {
+            text = getString(R.string.custom_list_desc)
+            setTextColor(getColor(R.color.muted))
+            textSize = 13f
+        }
+        container.addView(description)
+        container.addView(input)
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.custom_list)
+            .setView(container)
+            .setPositiveButton(R.string.save_list) { _, _ ->
+                adBlocker.saveCustomHosts(input.text?.toString().orEmpty())
+            }
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
 

@@ -32,6 +32,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var adBlocker: AdBlocker
     private val streams = LinkedHashSet<String>()
+    private var pageHost: String? = null
 
     private var customView: View? = null
     private var customViewCallback: WebChromeClient.CustomViewCallback? = null
@@ -49,6 +50,7 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         adBlocker = AdBlocker(this)
+        pageHost = Uri.parse(url).host
         binding.toolbar.title = title.ifBlank { getString(R.string.app_name) }
         binding.toolbar.setNavigationOnClickListener { handleBack() }
         binding.toolbar.inflateMenu(R.menu.player_menu)
@@ -122,7 +124,11 @@ class PlayerActivity : AppCompatActivity() {
                 val target = request.url
                 val scheme = target.scheme?.lowercase()
                 if (scheme != "http" && scheme != "https") return true
-                return adBlocker.isBlocked(target.host, target.path)
+                val blocked = adBlocker.isBlocked(target.host, target.path)
+                if (!blocked && request.isForMainFrame) {
+                    pageHost = target.host
+                }
+                return blocked
             }
 
             override fun shouldInterceptRequest(
@@ -137,11 +143,42 @@ class PlayerActivity : AppCompatActivity() {
                         ByteArrayInputStream(ByteArray(0))
                     )
                 }
+
+                val currentPage = pageHost
+                if (adBlocker.strictMode && currentPage != null && !request.isForMainFrame) {
+                    val host = target.host
+                    if (host != null && !SiteUtils.sameSite(host, currentPage)) {
+                        val path = target.path?.lowercase().orEmpty()
+                        val media = StreamUtils.isMediaUrl(target.toString()) ||
+                            path.endsWith(".ts") ||
+                            path.endsWith(".m4s") ||
+                            path.endsWith(".aac")
+                        if (!media) {
+                            return WebResourceResponse(
+                                "text/plain",
+                                "utf-8",
+                                ByteArrayInputStream(ByteArray(0))
+                            )
+                        }
+                    }
+                }
+
                 if (StreamUtils.isMediaUrl(target.toString())) {
                     synchronized(streams) { streams.add(target.toString()) }
                     runOnUiThread { updateStreamBar() }
                 }
                 return null
+            }
+
+            override fun onPageStarted(
+                view: WebView,
+                url: String?,
+                favicon: android.graphics.Bitmap?
+            ) {
+                if (!url.isNullOrBlank()) {
+                    pageHost = Uri.parse(url).host
+                }
+                super.onPageStarted(view, url, favicon)
             }
 
             override fun onPageCommitVisible(view: WebView, url: String?) {
